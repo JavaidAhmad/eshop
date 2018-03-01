@@ -1,3 +1,6 @@
+import { ProductService } from './product.service';
+import { CategoryService } from './category.service';
+import { AdminAuthGuard } from './admin-auth-guard.service';
 import { AuthGuard } from './auth-guard.service';
 import { AuthService } from './auth.service';
 import { LoginComponent } from './login/login.component';
@@ -8,6 +11,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CustomFormsModule } from 'ng2-validation';
 
 import { AppComponent } from './app.component';
 import { BsNavbarComponent } from './bs-navbar/bs-navbar.component';
@@ -20,6 +24,9 @@ import { MyOrderComponent } from './my-order/my-order.component';
 import { AdminProductsComponent } from './admin/admin-products/admin-products.component';
 import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.component';
 import { RouterModule } from '@angular/router';
+import { UsersService } from './users.service';
+import { ProductFormComponent } from './admin/product-form/product-form.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,13 +40,16 @@ import { RouterModule } from '@angular/router';
     MyOrderComponent,
     AdminProductsComponent,
     AdminOrdersComponent,
-    LoginComponent
+    LoginComponent,
+    ProductFormComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AngularFireModule.initializeApp(environment.firbase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    CustomFormsModule,
     NgbModule.forRoot(),
     RouterModule.forRoot([
       //Anonymous user
@@ -52,12 +62,21 @@ import { RouterModule } from '@angular/router';
       {path:"order-success",component:OrderSuccessComponent,canActivate:[AuthGuard]},
       {path:"my/orders",component:MyOrderComponent,canActivate:[AuthGuard]},
       //Admin
-      {path:"admin/products",component:AdminProductsComponent, canActivate:[AuthGuard]},
-      {path:"admin/orders",component:AdminOrdersComponent, canActivate:[AuthGuard]},
+      {path:"admin/products/new",component:ProductFormComponent, canActivate:[AuthGuard,AdminAuthGuard]},
+      {path:"admin/products/:id",component:ProductFormComponent, canActivate:[AuthGuard,AdminAuthGuard]},
+      {path:"admin/products",component:AdminProductsComponent, canActivate:[AuthGuard,AdminAuthGuard]},
+      {path:"admin/orders",component:AdminOrdersComponent, canActivate:[AuthGuard,AdminAuthGuard]},
     ]),
     NgbModule.forRoot(),    
   ],
-  providers: [AuthService,AuthGuard],
+  providers: [
+    AuthService,
+    AuthGuard,
+    UsersService,
+    AdminAuthGuard,
+    CategoryService,
+    ProductService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -13,7 +13,10 @@ export class LoginComponent {
   constructor(private auth:AuthService) { }
   
   login(){
-   this.auth.login;
+    console.log('loggin hit');
+    
+   this.auth.login();
+   
   }
   
 
