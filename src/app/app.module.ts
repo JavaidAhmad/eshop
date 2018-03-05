@@ -12,6 +12,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomFormsModule } from 'ng2-validation';
+import { DataTableModule } from 'angular5-data-table';
 
 import { AppComponent } from './app.component';
 import { BsNavbarComponent } from './bs-navbar/bs-navbar.component';
@@ -27,6 +28,9 @@ import { RouterModule } from '@angular/router';
 import { UsersService } from './users.service';
 import { ProductFormComponent } from './admin/product-form/product-form.component';
 import { FormsModule } from '@angular/forms';
+import { ProductFilterComponent } from './products/product-filter/product-filter.component';
+import { ProductCardComponent } from './product-card/product-card.component';
+import { ShoppingCartService } from './shopping-cart.service';
 
 @NgModule({
   declarations: [
@@ -41,11 +45,15 @@ import { FormsModule } from '@angular/forms';
     AdminProductsComponent,
     AdminOrdersComponent,
     LoginComponent,
-    ProductFormComponent
+    ProductFormComponent,
+    ProductFilterComponent,
+    ProductCardComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    CustomFormsModule, //for validtion
+    DataTableModule, //for table paigination
     AngularFireModule.initializeApp(environment.firbase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
@@ -53,7 +61,7 @@ import { FormsModule } from '@angular/forms';
     NgbModule.forRoot(),
     RouterModule.forRoot([
       //Anonymous user
-      {path:"",component:HomeComponent},
+      {path:"",component:ProductsComponent},
       {path:"login",component:LoginComponent},
       {path:"products", component:ProductsComponent},
       {path:"shopping-cart",component:ShoppingCartComponent},
@@ -75,7 +83,8 @@ import { FormsModule } from '@angular/forms';
     UsersService,
     AdminAuthGuard,
     CategoryService,
-    ProductService
+    ProductService,
+    ShoppingCartService
   ],
   bootstrap: [AppComponent]
 })
